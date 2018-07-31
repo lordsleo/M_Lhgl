@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Push">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="receiverId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="senderId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="appName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="param" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PushResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PushResult" type="tns:PackageOfBoolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PackageOfBoolean">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Exception" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Value" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AuthHeader" type="tns:AuthHeader" />
+      <s:complexType name="AuthHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PassWord" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="PackageOfBoolean" nillable="true" type="tns:PackageOfBoolean" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="PushSoapIn">
+    <wsdl:part name="parameters" element="tns:Push" />
+  </wsdl:message>
+  <wsdl:message name="PushSoapOut">
+    <wsdl:part name="parameters" element="tns:PushResponse" />
+  </wsdl:message>
+  <wsdl:message name="PushAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PushHttpGetIn">
+    <wsdl:part name="receiverId" type="s:string" />
+    <wsdl:part name="senderId" type="s:string" />
+    <wsdl:part name="appName" type="s:string" />
+    <wsdl:part name="title" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="param" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PushHttpGetOut">
+    <wsdl:part name="Body" element="tns:PackageOfBoolean" />
+  </wsdl:message>
+  <wsdl:message name="PushHttpPostIn">
+    <wsdl:part name="receiverId" type="s:string" />
+    <wsdl:part name="senderId" type="s:string" />
+    <wsdl:part name="appName" type="s:string" />
+    <wsdl:part name="title" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="param" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PushHttpPostOut">
+    <wsdl:part name="Body" element="tns:PackageOfBoolean" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceMobileSoap">
+    <wsdl:operation name="Push">
+      <wsdl:input message="tns:PushSoapIn" />
+      <wsdl:output message="tns:PushSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ServiceMobileHttpGet">
+    <wsdl:operation name="Push">
+      <wsdl:input message="tns:PushHttpGetIn" />
+      <wsdl:output message="tns:PushHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ServiceMobileHttpPost">
+    <wsdl:operation name="Push">
+      <wsdl:input message="tns:PushHttpPostIn" />
+      <wsdl:output message="tns:PushHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceMobileSoap" type="tns:ServiceMobileSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Push">
+      <soap:operation soapAction="http://tempuri.org/Push" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PushAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceMobileSoap12" type="tns:ServiceMobileSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Push">
+      <soap12:operation soapAction="http://tempuri.org/Push" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PushAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceMobileHttpGet" type="tns:ServiceMobileHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="Push">
+      <http:operation location="/Push" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceMobileHttpPost" type="tns:ServiceMobileHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="Push">
+      <http:operation location="/Push" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServiceMobile">
+    <wsdl:port name="ServiceMobileSoap" binding="tns:ServiceMobileSoap">
+      <soap:address location="http://218.92.115.55/M_Platform/ServiceMobile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceMobileSoap12" binding="tns:ServiceMobileSoap12">
+      <soap12:address location="http://218.92.115.55/M_Platform/ServiceMobile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceMobileHttpGet" binding="tns:ServiceMobileHttpGet">
+      <http:address location="http://218.92.115.55/M_Platform/ServiceMobile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceMobileHttpPost" binding="tns:ServiceMobileHttpPost">
+      <http:address location="http://218.92.115.55/M_Platform/ServiceMobile.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
